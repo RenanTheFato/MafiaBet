@@ -7,14 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRoles {
+  ADMIN
+  USER
+}
+
 model Users {
-  id             String @id @default(uuid())
-  email          String @unique
+  id             String    @id @default(uuid())
+  email          String    @unique
   password       String
   username       String
-  balanceInCents Int    @default(0) @map("balance_in_cents")
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
-  
+  role           UserRoles @default(USER)
+  balanceInCents Int       @default(0) @map("balance_in_cents")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
   @@map("users")
+}
+
+enum EventStatus {
+  SCHEDULED
+  LIVE
+  FINISHED
+  CANCELLED
+}
+
+model Events {
+  id        String      @id @default(uuid())
+  name      String
+  startTime DateTime    @map("start_time")
+  endTime   DateTime?   @map("end_time")
+  status    EventStatus @default(SCHEDULED)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  @@map("events")
 }
