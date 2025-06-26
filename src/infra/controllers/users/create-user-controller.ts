@@ -21,8 +21,6 @@ export class CreateUserController {
         .max(128, { message: "The username has exceeded the character limit (128)." })
     })
 
-    const { email, password, username } = req.body as z.infer<typeof validateUserSchema>
-
     try {
       validateUserSchema.parse(req.body)
     } catch (error) {
@@ -32,10 +30,12 @@ export class CreateUserController {
           message: err.message,
           path: err.path.join("/")
         }))
-
+        
         return rep.status(400).send({ statusCode: 400, code: errors[0].code, error: "Bad Request", message: errors[0].message, field: errors[0].path })
       }
     }
+    
+    const { email, password, username } = req.body as z.infer<typeof validateUserSchema>
 
     const hashedPassword = await hash(password, 10)
 

@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest, FastifyInstance } from "fastify";
 import { CreateUserController } from "../controllers/users/create-user-controller.js";
+import { AuthorizationUserController } from "../controllers/users/auth-user-controller.js";
 
 export async function userRoutes(fastify: FastifyInstance) {
   fastify.get("/ping", async (req: FastifyRequest, rep: FastifyReply) => {
@@ -8,5 +9,9 @@ export async function userRoutes(fastify: FastifyInstance) {
   
   fastify.post("/create-user", async (req: FastifyRequest, rep: FastifyReply) => {
     return new CreateUserController().handle(req, rep)
+  })
+
+  fastify.post("/auth-user", async (req: FastifyRequest, rep: FastifyReply) => {
+    return new AuthorizationUserController().handle(req, rep)
   })
 }
