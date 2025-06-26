@@ -1,6 +1,7 @@
 import { fastify } from "fastify";
-import cors from "@fastify/cors";
 import { config } from "dotenv";
+import cors from "@fastify/cors";
+import { routes } from "./infra/routes/index.js";
 
 config()
 const app = fastify({ logger: true })
@@ -11,6 +12,7 @@ async function start() {
   const PORT = process.env.HTTP_PORT
 
   await app.register(cors)
+  await app.register(routes)
   
   await app.listen({
     host: String(HOST) || "0.0.0.0",
